@@ -390,6 +390,306 @@ const DAYS_B2 = [
   },
 ];
 
+/* ─────────────────────────  SCHEMA (Blok 3 — Ryan, okt 2026)  ───────────────────────── */
+
+/* Blok 3 geeft geen werkgewichten: je kiest zelf een gewicht dat bij reps + RIR past.
+   Week 1 t/m 4 hetzelfde plan; verhogen volgens de progressieregel in BLOK3_NOTES. */
+const P = (reps, rir, rust, tempo, kg = "") => ({ kg, reps, rir, rust, tempo });
+const BW3 = "lichaamsgewicht";
+
+/* Elke dag is mobiliteitsdag: deze kaart staat op alle dagen van blok 3. */
+const MOB_B3 = {
+  kind: "check", name: "Mobiliteit", tag: "Elke dag",
+  items: [
+    { name: "Doorway chest stretch", dose: "2 × 30 sec", how: "Onderarmen tegen de deurpost. Beweeg de borst voorzichtig naar voren en voel lichte tot matige rek aan de voorkant van de schouders en borst." },
+    { name: "Extended child's pose", dose: "2 × 30 sec", how: "Zit op de knieën, strek de armen naar voren en laat de borst rustig richting de vloer zakken. Adem ontspannen door." },
+    { name: "Seated thoracic extension", dose: "2 × 8 reps", how: "Handen achter hoofd en ellebogen bij elkaar. Strek de bovenrug over de stoelleuning zoals de fysiotherapeut heeft uitgelegd." },
+    { name: "Cat-cow", dose: "2 × 8-10 reps", how: "Maak de rug afwisselend bol en hol. Beweeg rustig en probeer de bovenrug bewust mee te nemen." },
+    { name: "4-4-4 breathing", dose: "1 × 2 min", how: "Adem 4 sec in, houd 4 sec vast en adem 4 sec uit. Verifieer de exacte uitvoering zo nodig met de fysiotherapeut." },
+  ],
+  desc: "Vaste dagelijkse reeks voor borst, schouders en bovenrug, afgesloten met een rustige ademhalingsoefening. Ook op trainingsdagen.",
+  aitips: [
+    "Zoek lichte tot matige rek — nooit doorduwen tot het pijn doet.",
+    "Doorway stretch: zet een kleine stap naar voren in plaats van je onderrug hol te trekken.",
+    "Child's pose: laat bij elke uitademing je borst een fractie verder zakken.",
+    "Bij thoracic extension en cat-cow beweegt je bovenrug, niet je onderrug.",
+    "Liever elke dag kort en rustig dan één keer per week lang en intensief.",
+  ],
+  tip: "Voer de oefeningen rustig en gecontroleerd uit, met 15 sec rust tussen de sets. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit.",
+};
+
+/* Stretch cycle "zoals voorgeschreven door je fysio" — de oefeningen staan niet in het schema. */
+const STRETCH_B3 = {
+  kind: "stretch", name: "Stretch cycle (later op de dag)", rounds: 3, tag: "Volgens fysio",
+  desc: "Je vaste stretch cycle zoals je fysio hem heeft voorgeschreven. Drie volledige rondes, rustig uitgevoerd.",
+  aitips: [
+    "Doe de cycle later op de dag, los van je training.",
+    "Eén ronde = de volledige cycle; daarna begin je weer vanaf de eerste oefening.",
+    "Rustig bewegen en blijven ademen, nooit doorveren.",
+    "Voel rek, geen pijn — bij scherpe pijn ga je terug.",
+    "Twijfel je over een oefening? Check de uitvoering bij je fysio.",
+  ],
+  tip: "Elke dag je stretch cycle doen zoals voorgeschreven door je fysio: drie rondes van de volledige cycle.",
+};
+
+const BLOK3_NOTES = [
+  { t: "Belangrijkste doel", d: "Verbeteren van schouder- en bovenrugmobiliteit, versterken van de bovenrug, ontwikkelen van betere schouderbladcontrole en pijnvrij blijven sporten." },
+  { t: "RIR (reps in reserve)", d: "Het aantal herhalingen dat je nog zou kunnen uitvoeren voordat je technisch faalt. Bij 2 RIR stop je wanneer je nog ongeveer 2 goede herhalingen zou kunnen maken." },
+  { t: "Tempo 2-0-1-0", d: "2 seconden gecontroleerd laten zakken, 0 seconden pauze, 1 seconde omhoog en 0 seconden pauze voordat de volgende herhaling begint." },
+  { t: "Tempo 2-1-1-0", d: "2 seconden gecontroleerd laten zakken of terugkomen, 1 seconde pauze in de afgesproken positie en 1 seconde terugbewegen. Bij rows houd je de schouderbladen 1 seconde samen aan het einde van de trekbeweging." },
+  { t: "Progressie", d: "Bij 3 sets van 10–15 reps mag het gewicht de volgende training omhoog wanneer set 1 meer dan 15 reps haalt en set 2 en 3 minimaal 10 reps halen. Alle sets met goede techniek en ongeveer 2 RIR. Voorbeeld: 16/12/9 = niet verhogen. 16/12/10 = wel verhogen." },
+  { t: "Schouderbladcontrole", d: "Bij rows de schouderbladen gecontroleerd naar elkaar toe bewegen aan het einde van de trekbeweging. Laat ze tijdens het terugkomen weer natuurlijk naar voren bewegen. Niet geforceerd naar achteren houden." },
+  { t: "Mobiliteit", d: "Voer de oefeningen rustig en gecontroleerd uit. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit." },
+  { t: "Herstel", d: "Houd bij voorkeur 2–3 dagen tussen Full Body A en Full Body B. De mobiliteitsoefeningen mogen dagelijks worden uitgevoerd, ook op trainingsdagen." },
+  { t: "Hardlopen", d: "Minimaal 1 keer per week op rustig tempo (RPE 4–5). Je moet tijdens het hardlopen nog volledige zinnen kunnen spreken. Bouw de duur geleidelijk op." },
+];
+
+const DAYS_B3 = [
+  {
+    id: "b3d1", nr: 1, name: "Full Body A", sub: "Kracht", type: "kracht",
+    intro: "Begin met je dagelijkse mobiliteit. Kies bij de krachtoefeningen zelf een gewicht waarmee je de reps haalt op de aangegeven RIR, in het aangegeven tempo. Houd bij voorkeur 2–3 dagen tussen Full Body A en B.",
+    ex: [
+      { id: "b3d1m", ...MOB_B3 },
+      {
+        id: "b3d1a", kind: "str", name: "Seated thoracic extension", sets: 2,
+        wk: W4(P("8-10", "", "30s", "rustig", BW3)),
+        desc: "Zittend op een stoel strek je je bovenrug over de rugleuning. Maakt je bovenrug soepeler.",
+        aitips: [
+          "Kies een stoel met een stevige leuning die net onder je schouderbladen valt.",
+          "Handen achter je hoofd, ellebogen naar elkaar toe — zo blijft de beweging in je bovenrug.",
+          "Adem uit terwijl je achterover strekt, adem in als je terugkomt.",
+          "Houd je ribben laag: je onderrug mag het werk niet overnemen.",
+          "Rek is goed, pijn niet — blijf binnen een comfortabele range.",
+        ],
+        tip: "Handen achter hoofd, ellebogen dicht bij elkaar. Strek de bovenrug rustig over de stoelleuning, zonder te compenseren vanuit de onderrug.",
+      },
+      {
+        id: "b3d1b", kind: "str", name: "Chest-supported machine row", sets: 4,
+        wk: W4(P("10-12", "2", "90s", "2-1-1-0")),
+        desc: "Met je borst tegen een steunkussen trek je de handvatten naar je toe. Traint je bovenrug zonder dat je onderrug hoeft mee te werken.",
+        aitips: [
+          "Stel het kussen zo in dat je de handvatten net met gestrekte armen pakt.",
+          "Borst blijft tegen de steun — niet achterover leunen om meer gewicht te trekken.",
+          "Trek je ellebogen langs je lijf naar achteren en houd 1 sec vast met de schouderbladen samen.",
+          "Laat in 2 tellen terugkomen en laat je schouderbladen daarbij weer naar voren bewegen.",
+          "Kies een gewicht waarmee je 10-12 reps haalt met nog ~2 in de tank.",
+        ],
+        tip: "Borst tegen de steun. Trek de ellebogen naar achteren en breng de schouderbladen bewust samen. Houd 1 seconde vast en laat gecontroleerd terugkomen.",
+      },
+      {
+        id: "b3d1c", kind: "str", name: "Goblet squat", sets: 3,
+        wk: W4(P("8-12", "2", "90s", "2-0-1-0")),
+        desc: "Squat met een dumbbell voor je borst. Traint benen en billen met een rechte, stabiele romp.",
+        aitips: [
+          "Houd de dumbbell dicht tegen je borst, ellebogen naar beneden.",
+          "Zak in 2 tellen, geen pauze onderin, en kom in 1 tel omhoog.",
+          "Knieën naar buiten in lijn met je tenen, hielen aan de grond.",
+          "Romp rechtop en stabiel — de dumbbell mag niet naar voren kantelen.",
+          "Gaat het gewicht ten koste van je schouders? Kies een lichtere dumbbell.",
+        ],
+        tip: "Dumbbell voor de borst. Zak gecontroleerd en houd de romp stabiel. Kies een gewicht waarbij de schouders comfortabel blijven.",
+      },
+      {
+        id: "b3d1d", kind: "str", name: "Neutral-grip lat pulldown", sets: 3,
+        wk: W4(P("10-12", "2-3", "90s", "2-0-1-0")),
+        desc: "Zittend trek je handvatten met je handpalmen naar elkaar toe naar je bovenborst. Traint je brede rugspieren en is vriendelijk voor je schouders.",
+        aitips: [
+          "Zet je knieën vast onder de rol zodat je niet omhoog getrokken wordt.",
+          "Laat je schouders eerst iets omlaag zakken, dan pas trekken.",
+          "Trek richting je bovenborst met je ellebogen naar beneden.",
+          "Laat de handvatten in 2 tellen gecontroleerd terug omhoog gaan.",
+          "Hooguit licht achterover leunen, geen zwaai uit je romp.",
+        ],
+        tip: "Trek de handvatten richting bovenborst. Laat de schouderbladen natuurlijk bewegen en gebruik een comfortabele bewegingsuitslag.",
+      },
+      {
+        id: "b3d1e", kind: "str", name: "Dumbbell Romanian deadlift", sets: 3,
+        wk: W4(P("8-12", "2", "90s", "2-0-1-0")),
+        desc: "Met licht gebogen knieën scharnier je vanuit je heupen voorover, de dumbbells langs je benen. Traint hamstrings, billen en onderrug.",
+        aitips: [
+          "Begin door je billen naar achteren te duwen, niet door voorover te buigen.",
+          "Knieën licht gebogen, en die hoek blijft de hele herhaling gelijk.",
+          "Dumbbells dicht langs je benen, rug recht van stuitje tot nek.",
+          "Zak tot je stevige rek in je hamstrings voelt — niet verder dan je rug recht kan blijven.",
+          "Kom omhoog door je heupen naar voren te duwen en knijp bovenin je billen aan.",
+        ],
+        tip: "Duw de heupen naar achteren met licht gebogen knieën. Dumbbells dicht langs de benen. Voel rek op de hamstrings en kom gecontroleerd omhoog.",
+      },
+      {
+        id: "b3d1f", kind: "str", name: "Cable face pull", sets: 3,
+        wk: W4(P("12-15", "2-3", "60s", "2-1-1-0")),
+        desc: "Aan de kabel trek je een touw naar je gezicht, ellebogen hoog en naar buiten. Traint de achterkant van je schouders en je bovenrug.",
+        aitips: [
+          "Zet de kabel op ongeveer ooghoogte.",
+          "Trek richting je gezicht en laat je handen uit elkaar gaan, ellebogen naar buiten.",
+          "Houd 1 sec vast en voel je achterste schouders en bovenrug werken.",
+          "Schouders laag en ontspannen — niet optrekken naar je oren.",
+          "Licht gewicht, nette reps: dit is controlewerk, geen krachtrecord.",
+        ],
+        tip: "Trek het touw richting het gezicht. Ellebogen naar buiten, schouders ontspannen. Houd kort vast en laat gecontroleerd terugkomen.",
+      },
+      {
+        id: "b3d1g", kind: "str", name: "Dead bug", sets: 3,
+        wk: W4(P("8-10 per kant", "", "60s", "rustig", BW3)),
+        desc: "Op je rug, armen omhoog en knieën boven je heupen, strek je afwisselend een arm en het andere been uit. Traint je rompstabiliteit.",
+        aitips: [
+          "Druk je onderrug zacht richting de vloer en houd dat contact vast.",
+          "Strek tegelijk je rechterarm en linkerbeen uit, dan wissel je.",
+          "Hoe langzamer je beweegt, hoe harder je buikspieren werken.",
+          "Adem uit terwijl arm en been uitstrekken.",
+          "Komt je onderrug los van de grond? Strek dan minder ver uit.",
+        ],
+        tip: "Houd de romp stabiel. Strek afwisselend een arm en het tegenovergestelde been zonder de onderrug sterk hol te trekken.",
+      },
+      { id: "b3d1s", ...STRETCH_B3 },
+    ],
+  },
+  {
+    id: "b3d2", nr: 2, name: "Zone 2 run", sub: "Cardio", type: "cardio",
+    intro: "Rustige run van 6 tot 10 km. Je moet tijdens het lopen nog volledige zinnen kunnen spreken (RPE 4–5); bouw de duur geleidelijk op. Stretch cycle later op de dag.",
+    ex: [
+      { id: "b3d2m", ...MOB_B3 },
+      {
+        id: "b3d2w", kind: "check", name: "Warming-up",
+        items: [
+          { name: "Stretch glutes, quads en heupen", dose: "rustig" },
+          { name: "Pogo jumps", dose: "1 min" },
+        ],
+        desc: "Korte warming-up vóór de run: eerst rekken, dan je kuiten en enkels activeren met kleine sprongetjes.",
+        aitips: [
+          "Rek rustig — dit is losmaken, geen lange statische stretch.",
+          "Pogo jumps: kleine, snelle sprongetjes op je voorvoeten met bijna gestrekte knieën.",
+          "Land zacht en veerkrachtig, alsof de grond heet is.",
+          "Romp rechtop, armen ontspannen.",
+          "Begin daarna meteen rustig aan de run.",
+        ],
+        tip: "Stretch glutes, quads en heupen voordat je de 1 minuut pogo's doet.",
+      },
+      {
+        id: "b3d2r", kind: "run", name: "Run — Zone 2", zone: "Zone 2 · ~6:30/km · RPE 4-5",
+        wk: W4({ dist: "6-10 km" }),
+        desc: "Rustige duurloop op lage hartslag — je moet volledige zinnen kunnen spreken. Bouwt je basisconditie op.",
+        aitips: [
+          "Kun je nog hele zinnen praten? Dan zit je goed in zone 2.",
+          "~6:30 per km is een richtlijn; hartslag en gevoel (RPE 4-5) zijn leidend.",
+          "Start rustiger dan je wilt — het moet de hele run ontspannen blijven voelen.",
+          "Bouw de afstand geleidelijk op binnen 6-10 km, niet in één keer naar 10.",
+          "Korte, ontspannen pasjes en losse schouders.",
+        ],
+        tip: "Zone 2 run: lekker lopen en genieten van het weer of je hoofd leegmaken. Tempo rond 6:30 per km.",
+      },
+      { id: "b3d2s", ...STRETCH_B3 },
+    ],
+  },
+  {
+    id: "b3d3", nr: 3, name: "Full Body B", sub: "Kracht", type: "kracht",
+    intro: "Houd bij voorkeur 2–3 dagen tussen Full Body A en B. Focus op je bovenrug en schouderbladcontrole, en blijf overal binnen een pijnvrije bewegingsuitslag.",
+    ex: [
+      { id: "b3d3m", ...MOB_B3 },
+      {
+        id: "b3d3a", kind: "str", name: "Cat-cow", sets: 2,
+        wk: W4(P("10", "", "30s", "rustig", BW3)),
+        desc: "Op handen en knieën maak je je rug afwisselend bol en hol. Maakt je hele wervelkolom soepel, met nadruk op je bovenrug.",
+        aitips: [
+          "Handen onder je schouders, knieën onder je heupen.",
+          "Bol: adem uit, duw de vloer weg en laat je hoofd zakken.",
+          "Hol: adem in, borst naar voren en blik licht omhoog.",
+          "Beweeg wervel voor wervel en neem je bovenrug bewust mee.",
+          "Rustig tempo, geen schokken — het gaat om controle.",
+        ],
+        tip: "Op handen en knieën de rug afwisselend bol en hol maken. Beweeg gecontroleerd en neem de bovenrug bewust mee.",
+      },
+      {
+        id: "b3d3b", kind: "str", name: "Single-arm cable row", sets: 3,
+        wk: W4(P("10-12 per arm", "2", "90s", "2-1-1-0")),
+        desc: "Aan de kabel trek je met één arm het handvat naar je heup. Traint je bovenrug en schouderbladcontrole, per kant.",
+        aitips: [
+          "Sta of zit stevig, romp recht en stil.",
+          "Trek je elleboog langs je lijf richting je heup.",
+          "Houd 1 sec vast met je schouderblad naar achteren.",
+          "Laat bij het terugkomen je schouderblad rustig naar voren meebewegen.",
+          "Draai niet mee met je romp om het gewicht binnen te halen.",
+        ],
+        tip: "Trek de elleboog richting de heup. Laat het schouderblad naar voren meebewegen en trek gecontroleerd terug. Geen overdreven rotatie van de romp.",
+      },
+      {
+        id: "b3d3c", kind: "str", name: "Leg press", sets: 3,
+        wk: W4(P("10-15", "2", "90s", "2-0-1-0")),
+        desc: "In de machine duw je de slede weg met je benen. Traint bovenbenen en billen, met je rug gesteund.",
+        aitips: [
+          "Voeten op schouderbreedte, midden op het plateau.",
+          "Zak zo diep als je bekken stil tegen de leuning kan blijven.",
+          "Billen en onderrug blijven tegen de leuning — niet oprollen onderin.",
+          "Duw vanuit je hele voet, niet alleen vanuit je tenen.",
+          "Klap je knieën bovenin niet op slot.",
+        ],
+        tip: "Voeten ongeveer op schouderbreedte. Zak gecontroleerd met het bekken stabiel tegen de leuning. Duw vanuit de hele voet omhoog.",
+      },
+      {
+        id: "b3d3d", kind: "str", name: "Chest press machine", sets: 3, tag: "Neutral grip",
+        wk: W4(P("10-12", "2-3", "90s", "2-0-1-0")),
+        desc: "Zittend duw je de handvatten van je borst weg, met je handpalmen naar elkaar toe. Traint borst, schouders en triceps; de neutrale greep spaart je schouders.",
+        aitips: [
+          "Stel de stoel zo in dat de handvatten op borsthoogte staan.",
+          "Gebruik de verticale handvatten als de machine die heeft.",
+          "Laat in 2 tellen terugkomen, alleen zo ver als pijnvrij voelt.",
+          "Schouderbladen tegen het kussen, schouders laag.",
+          "Druk uit tot bijna gestrekte armen, niet hard op slot.",
+        ],
+        tip: "Gebruik een neutrale greep indien mogelijk. Laat gecontroleerd zakken en druk uit binnen een pijnvrije bewegingsuitslag.",
+      },
+      {
+        id: "b3d3e", kind: "str", name: "Seated hamstring curl", sets: 3,
+        wk: W4(P("10-15", "2", "75s", "2-0-1-0")),
+        desc: "Zittend in de machine buig je je knieën tegen het kussen in. Traint de achterkant van je bovenbenen.",
+        aitips: [
+          "Stel de machine zo in dat je knie op de draai-as ligt.",
+          "Zet de bovenbeenrol stevig vast zodat je heupen op de zitting blijven.",
+          "Buig in 1 tel, laat in 2 tellen gecontroleerd terugkomen.",
+          "Knijp onderin even je hamstrings aan.",
+          "Laat het gewicht tussen de reps niet terugklappen.",
+        ],
+        tip: "Houd de heupen tegen de zitting. Buig de knieën gecontroleerd en laat het gewicht rustig terugkomen.",
+      },
+      {
+        id: "b3d3f", kind: "str", name: "Reverse pec deck", sets: 3,
+        wk: W4(P("12-15", "2", "60s", "2-1-1-0")),
+        desc: "Met je borst tegen de steun open je je armen naar achteren. Traint de achterkant van je schouders en je bovenrug.",
+        aitips: [
+          "Handvatten op schouderhoogte, ellebogen licht gebogen.",
+          "Open je armen in een wijde boog en houd 1 sec vast.",
+          "Schouderbladen bewegen naar elkaar toe, zonder te forceren.",
+          "Schouders laag — niet optrekken richting je oren.",
+          "Laat in 2 tellen langzaam terugkomen.",
+        ],
+        tip: "Borst tegen de steun. Open de armen gecontroleerd, beweeg de schouderbladen naar elkaar toe zonder te forceren en laat langzaam terugkomen.",
+      },
+      {
+        id: "b3d3g", kind: "str", name: "Wall slide", sets: 3,
+        wk: W4(P("10-12", "", "60s", "gecontroleerd", BW3)),
+        desc: "Met je rug en armen tegen de muur schuif je je armen omhoog en weer omlaag. Traint schoudermobiliteit en schouderbladcontrole.",
+        aitips: [
+          "Billen, bovenrug en hoofd tegen de muur, hielen een klein stukje ervandaan.",
+          "Onderarmen en handen zo goed mogelijk tegen de muur, ellebogen gebogen.",
+          "Schuif omhoog zo ver als lukt zonder dat je onderrug hol trekt.",
+          "Ribben laag houden — span je buik licht aan.",
+          "Rustig omlaag en voel je schouderbladen meebewegen.",
+        ],
+        tip: "Sta met de rug tegen de muur. Beweeg de armen rustig omhoog binnen de beschikbare bewegingsruimte, zonder de onderrug overdreven hol te maken.",
+      },
+      { id: "b3d3s", ...STRETCH_B3 },
+    ],
+  },
+  {
+    id: "b3d4", nr: 4, name: "Mobiliteit", sub: "Rustdagen", type: "mob",
+    intro: "Elke dag is mobiliteitsdag. Op dagen zonder training doe je je dagelijkse mobiliteit en later op de dag je stretch cycle.",
+    ex: [
+      { id: "b3d4m", ...MOB_B3 },
+      { id: "b3d4s", ...STRETCH_B3 },
+    ],
+  },
+];
+
 /* ─────────────────────────  blokken  ───────────────────────── */
 
 const BLOKS = [
@@ -400,14 +700,20 @@ const BLOKS = [
     subtitle: "Kracht · conditie · mobiliteit — 4 weken · coach Zlatan",
   },
   {
-    id: "blok2", name: "Blok 2", period: "sep 2026", badge: "actief", archived: false,
+    id: "blok2", name: "Blok 2", period: "sep 2026", badge: "archief", archived: true,
     days: DAYS_B2, storageKey: "blok2-ryan-log", logId: "ryan-blok2",
     eyebrow: "Trainingslog Ryan · Blok 2 · september 2026",
     subtitle: "Kracht · conditie · mobiliteit — 5 dagen · 4 weken · coach Zlatan",
   },
+  {
+    id: "blok3", name: "Blok 3", period: "okt 2026", badge: "actief", archived: false,
+    days: DAYS_B3, storageKey: "blok3-ryan-log", logId: "ryan-blok3", notes: BLOK3_NOTES,
+    eyebrow: "Trainingslog Ryan · Blok 3 · oktober 2026",
+    subtitle: "Mobiliteit · kracht · hardlopen — 3 trainingsdagen + elke dag mobiliteit · 4 weken · coach Zlatan",
+  },
 ];
 
-const DEFAULT_BLOK = 1; // blok 2 is de startpagina
+const DEFAULT_BLOK = 2; // blok 3 is de startpagina
 
 const TYPE_COLOR = { kracht: "var(--kracht)", cardio: "var(--cardio)", mob: "var(--mob)" };
 const TYPE_LABEL = { kracht: "Kracht", cardio: "Cardio", mob: "Mobiliteit" };
@@ -509,6 +815,7 @@ const dayKey = (w, d) => `w${w}d${d}`;
 function emptyExLog(ex, week) {
   if (ex.kind === "str") return { sets: Array.from({ length: ex.sets }, () => ({ kg: "", reps: "", ok: false })), note: "" };
   if (ex.kind === "stretch") return { rounds: [false, false, false], note: "" };
+  if (ex.kind === "check") return { checks: ex.items.map(() => false), note: "" };
   if (ex.kind === "interval") {
     const n = ex.wk[week].n;
     return { warm: { ok: false }, ints: Array.from({ length: n }, () => ({ val: "", ok: false })), cool: { ok: false }, note: "" };
@@ -520,13 +827,25 @@ function emptyExLog(ex, week) {
 /* Gewicht/reps netjes tonen: "60" → "60 kg", "BW" → "BW / assisted",
    "passend" en "max reps" blijven staan zoals ze zijn. */
 function kgLabel(kg) {
-  if (!kg) return "gewicht naar gevoel";
+  if (!kg) return "kies je gewicht";
   if (kg === "BW") return "BW / assisted";
   return /^[\d.,]+$/.test(String(kg)) ? `${kg} kg` : kg;
 }
 function repsLabel(reps) {
   return /^[\d\s\-–]+$/.test(String(reps)) ? `${reps} reps` : reps;
 }
+/* Korte vorm voor smalle plekken (invoerveld, grafieklabel, export). Leeg = zelf kiezen. */
+function kgShort(kg) {
+  return kg === "lichaamsgewicht" ? "BW" : kg || "";
+}
+/* Eén gelogde set als "60×10✓"; zonder gewicht alleen de reps. */
+function setTxt(s, planKg) {
+  const kg = s.kg || kgShort(planKg);
+  return `${kg ? `${kg}×` : ""}${s.reps || "?"}${s.ok ? "✓" : ""}`;
+}
+
+/* Afvinklijsten en stretch cycles horen niet in de voortgangsgrafiek. */
+const isTrackable = (ex) => ex.kind !== "stretch" && ex.kind !== "check";
 
 function fmtDate(iso) {
   if (!iso) return "";
@@ -539,6 +858,7 @@ function exDoneCount(ex, log) {
   if (!log) return 0;
   if (ex.kind === "str") return (log.sets || []).filter((s) => s.ok).length;
   if (ex.kind === "stretch") return (log.rounds || []).filter(Boolean).length;
+  if (ex.kind === "check") return (log.checks || []).filter(Boolean).length;
   if (ex.kind === "interval") return (log.ints || []).filter((i) => i.ok).length + (log.warm?.ok ? 1 : 0) + (ex.cooldown && log.cool?.ok ? 1 : 0);
   if (ex.kind === "run") return log.ok ? 1 : 0;
   return 0;
@@ -546,6 +866,7 @@ function exDoneCount(ex, log) {
 function exTotalCount(ex, week) {
   if (ex.kind === "str") return ex.sets;
   if (ex.kind === "stretch") return ex.rounds;
+  if (ex.kind === "check") return ex.items.length;
   if (ex.kind === "interval") return ex.wk[week].n + 1 + (ex.cooldown ? 1 : 0);
   if (ex.kind === "run") return 1;
   return 0;
@@ -570,20 +891,20 @@ function buildExport(logs, week, blok) {
         const done = (el.sets || []).filter((s) => s.ok || s.kg || s.reps);
         if (!done.length && !(el.note || "").trim()) return;
         const plan = ex.wk[week];
+        const planKg = kgShort(plan.kg);
         const setsTxt = (el.sets || [])
-          .map((s, i) => {
-            if (!s.ok && !s.kg && !s.reps) return null;
-            const kg = s.kg || plan.kg;
-            const reps = s.reps || "?";
-            return `${kg}×${reps}${s.ok ? "✓" : ""}`;
-          })
-          .filter(Boolean)
+          .filter((s) => s.ok || s.kg || s.reps)
+          .map((s) => setTxt(s, plan.kg))
           .join("  ");
-        lines.push(`• ${ex.name} (plan ${plan.kg} × ${plan.reps}): ${setsTxt || "—"}`);
+        lines.push(`• ${ex.name} (plan ${planKg ? `${planKg} × ` : ""}${plan.reps}): ${setsTxt || "—"}`);
         if ((el.note || "").trim()) lines.push(`  💬 ${el.note.trim()}`);
       } else if (ex.kind === "stretch") {
         const r = (el.rounds || []).filter(Boolean).length;
         if (r > 0) lines.push(`• ${ex.name}: ${r}/3 ronden`);
+        if ((el.note || "").trim()) lines.push(`  💬 ${el.note.trim()}`);
+      } else if (ex.kind === "check") {
+        const n = (el.checks || []).filter(Boolean).length;
+        if (n > 0) lines.push(`• ${ex.name}: ${n}/${ex.items.length} gedaan`);
         if ((el.note || "").trim()) lines.push(`  💬 ${el.note.trim()}`);
       } else if (ex.kind === "interval") {
         const n = (el.ints || []).filter((i) => i.ok).length;
@@ -613,7 +934,7 @@ export default function App() {
   const [week, setWeek] = useState(0); // 0..3
   const [dayNr, setDayNr] = useState(1); // 1..5
   const [view, setView] = useState("training"); // training | overzicht
-  const [blokIdx, setBlokIdx] = useState(DEFAULT_BLOK); // 0 = blok 1 (archief), 1 = blok 2
+  const [blokIdx, setBlokIdx] = useState(DEFAULT_BLOK); // index in BLOKS
   const [loading, setLoading] = useState(true);
   const [saveState, setSaveState] = useState("idle"); // idle | saving | saved | error
   const [progExId, setProgExId] = useState(null);
@@ -762,6 +1083,8 @@ export default function App() {
           <span className="plan-chip main">{kgLabel(plan.kg)}</span>
           <span className="plan-chip">{repsLabel(plan.reps)}</span>
           {plan.pct && <span className="plan-chip">{plan.pct}</span>}
+          {plan.rir && <span className="plan-chip">{plan.rir} RIR</span>}
+          {plan.tempo && <span className="plan-chip">tempo {plan.tempo}</span>}
           <span className="plan-chip">rust {plan.rust}</span>
         </div>
         <div className="setgrid-head">
@@ -772,7 +1095,7 @@ export default function App() {
             <span className="setnum">{i + 1}</span>
             <input
               inputMode="decimal"
-              placeholder={plan.kg === "BW" ? "BW" : plan.kg || "kg"}
+              placeholder={kgShort(plan.kg) || "kg"}
               value={s.kg}
               onChange={(e) => setExLog(ex, (c) => { c.sets[i].kg = e.target.value; return c; })}
             />
@@ -797,11 +1120,13 @@ export default function App() {
     const el = getExLog(ex);
     return (
       <div>
-        <ul className="stretchlist">
-          {ex.items.map((it) => (
-            <li key={it.name}><span>{it.name}</span><span className="dose">{it.dose}</span></li>
-          ))}
-        </ul>
+        {ex.items && (
+          <ul className="stretchlist">
+            {ex.items.map((it) => (
+              <li key={it.name}><span>{it.name}</span><span className="dose">{it.dose}</span></li>
+            ))}
+          </ul>
+        )}
         <div className="rounds">
           {[0, 1, 2].map((r) => (
             <button
@@ -814,6 +1139,30 @@ export default function App() {
           ))}
         </div>
       </div>
+    );
+  };
+
+  const renderCheck = (ex) => {
+    const el = getExLog(ex);
+    return (
+      <ul className="checklist">
+        {ex.items.map((it, i) => {
+          const on = !!el.checks?.[i];
+          return (
+            <li key={it.name} className={on ? "ok" : ""}>
+              <div>
+                <div className="ck-top"><span>{it.name}</span><span className="dose">{it.dose}</span></div>
+                {it.how && <p className="ck-how">{it.how}</p>}
+              </div>
+              <button className={"check" + (on ? " on" : "")} aria-label={`${it.name} gedaan`}
+                onClick={() => setExLog(ex, (c) => {
+                  if (!c.checks) c.checks = ex.items.map(() => false);
+                  c.checks[i] = !c.checks[i]; return c;
+                })}>✓</button>
+            </li>
+          );
+        })}
+      </ul>
     );
   };
 
@@ -902,6 +1251,7 @@ export default function App() {
 
         {ex.kind === "str" && renderStrength(ex)}
         {ex.kind === "stretch" && renderStretch(ex)}
+        {ex.kind === "check" && renderCheck(ex)}
         {ex.kind === "interval" && renderInterval(ex)}
         {ex.kind === "run" && renderRun(ex)}
 
@@ -945,7 +1295,7 @@ export default function App() {
   };
 
   const TRACKABLE = DAYS.flatMap((d) =>
-    d.ex.filter((e) => e.kind !== "stretch").map((e) => ({ ...e, dayNr: d.nr, dayName: d.name, dayType: d.type }))
+    d.ex.filter(isTrackable).map((e) => ({ ...e, dayNr: d.nr, dayName: d.name, dayType: d.type }))
   );
 
   const renderProgress = () => {
@@ -982,9 +1332,9 @@ export default function App() {
       <div className="progview">
         <p className="ov-intro">Kies een oefening en zie hoe je je over de vier weken ontwikkelt — plan versus wat je écht deed.</p>
         <select className="prog-select" value={ex.id} onChange={(e) => setProgExId(e.target.value)}>
-          {DAYS.filter((d) => d.ex.some((e) => e.kind !== "stretch")).map((d) => (
+          {DAYS.filter((d) => d.ex.some(isTrackable)).map((d) => (
             <optgroup key={d.id} label={`Dag ${d.nr} · ${d.name}`}>
-              {d.ex.filter((e) => e.kind !== "stretch").map((e) => (
+              {d.ex.filter(isTrackable).map((e) => (
                 <option key={e.id} value={e.id}>{e.name}</option>
               ))}
             </optgroup>
@@ -1003,7 +1353,7 @@ export default function App() {
                   )}
                 </div>
                 <span className="prog-wk">W{x.w + 1}</span>
-                <span className="prog-planlbl">plan {x.plan.kg}</span>
+                <span className="prog-planlbl">plan {kgShort(x.plan.kg) || "—"}</span>
               </div>
             ))}
           </div>
@@ -1021,7 +1371,7 @@ export default function App() {
               {ex.kind === "str" && (
                 <span className="prog-week-txt">
                   {x.sets.length
-                    ? x.sets.map((s, i) => `${s.kg || x.plan.kg}×${s.reps || "?"}${s.ok ? "✓" : ""}`).join("  ")
+                    ? x.sets.map((s) => setTxt(s, x.plan.kg)).join("  ")
                     : "—"}
                 </span>
               )}
@@ -1058,7 +1408,7 @@ export default function App() {
             <section className="ov-week" key={w}>
               <header>
                 <h3>Week {w + 1}</h3>
-                <span className="ov-count">{daysDone}/5 trainingen afgerond</span>
+                <span className="ov-count">{daysDone}/{DAYS.length} trainingen afgerond</span>
                 <button className="sharebtn small" onClick={() => copyExport(w)}>Kopieer</button>
               </header>
               {txt ? <pre className="ov-pre">{txt}</pre> : <p className="ov-empty">Nog niets gelogd.</p>}
@@ -1103,11 +1453,11 @@ export default function App() {
           </div>
           <div className="mast-count">
             <span className="big">{dayDoneCount}</span>
-            <span className="small">van 20<br />afgerond</span>
+            <span className="small">van {DAYS.length * 4}<br />afgerond</span>
           </div>
         </div>
 
-        {/* blokkaart: 4 weken × 5 dagen */}
+        {/* blokkaart: 4 weken × de dagen van het blok */}
         <div className="blokkaart" role="navigation" aria-label="Weekoverzicht">
           {[0, 1, 2, 3].map((w) => (
             <div className="bk-row" key={w}>
@@ -1184,6 +1534,17 @@ export default function App() {
               <span className="infolabel">Zo pak je dag {day.nr} aan</span>
               <p>{day.intro}</p>
             </div>
+          )}
+
+          {blok.notes && (
+            <details className="infocard bloknotes">
+              <summary className="infolabel">Uitleg bij {blok.name} · RIR, tempo, progressie</summary>
+              <dl>
+                {blok.notes.map((n) => (
+                  <div key={n.t}><dt>{n.t}</dt><dd>{n.d}</dd></div>
+                ))}
+              </dl>
+            </details>
           )}
 
           {day.ex.map(renderExercise)}
@@ -1389,6 +1750,17 @@ h1 .accent{color:var(--kracht);}
 }
 .roundbtn.on{background:var(--mob); border-color:var(--mob); color:#0D1015;}
 
+/* afvinklijst (dagelijkse mobiliteit, warming-up) */
+.checklist{list-style:none; margin:0; padding:0;}
+.checklist li{
+  display:grid; grid-template-columns:1fr 40px; gap:10px; align-items:center;
+  padding:8px 2px; border-bottom:1px dashed var(--line);
+}
+.checklist li:last-child{border-bottom:none;}
+.ck-top{display:flex; justify-content:space-between; gap:10px; font-size:13.5px;}
+.checklist .dose{color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:11px; white-space:nowrap;}
+.ck-how{margin:3px 0 0; font-size:12px; line-height:1.5; color:var(--muted);}
+
 /* info cards — één consistente stijl voor tip / beschrijving / AI tips */
 .infocard{
   margin:10px 0 0; background:var(--panel2); border:1px solid var(--line);
@@ -1410,6 +1782,15 @@ h1 .accent{color:var(--kracht);}
 .infocard.dayintro{margin:0 0 12px; border-left-color:var(--mob);}
 .infocard.dayintro .infolabel{color:var(--mob);}
 .infocard.dayintro p{color:var(--muted);}
+
+.infocard.bloknotes{margin:0 0 12px; border-left-color:var(--kracht);}
+.infocard.bloknotes summary{cursor:pointer; list-style:none; margin:0; color:var(--kracht);}
+.infocard.bloknotes summary::-webkit-details-marker{display:none;}
+.infocard.bloknotes summary::after{content:" +";}
+.infocard.bloknotes[open] summary::after{content:" −";}
+.infocard.bloknotes dl{margin:8px 0 0; display:flex; flex-direction:column; gap:9px;}
+.infocard.bloknotes dt{font-size:13px; font-weight:700;}
+.infocard.bloknotes dd{margin:2px 0 0; font-size:12.5px; line-height:1.55; color:var(--muted);}
 
 .infocard.aitips{border-left-color:var(--cardio);}
 .infocard.aitips .infolabel{color:var(--cardio);}

@@ -743,6 +743,13 @@ const supaHeaders = (extra = {}) => ({
   ...extra,
 });
 
+function readLocal(blok) {
+  try {
+    const raw = localStorage.getItem(blok.storageKey);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
 const storage = {
   async load(blok) {
     // 1) Supabase
@@ -754,8 +761,16 @@ const storage = {
         );
         if (res.ok) {
           const rows = await res.json();
-          if (rows && rows[0] && rows[0].data) return rows[0].data;
-          return {}; // rij bestaat nog niet — leeg beginnen
+          const online = (rows && rows[0] && rows[0].data) || {};
+          // Dagen die alleen op dit apparaat staan (gelogd toen Supabase gepauzeerd of
+          // onbereikbaar was) samenvoegen en alsnog online zetten. Online wint bij dubbele dagen.
+          const local = readLocal(blok);
+          if (Object.keys(local).some((k) => !(k in online))) {
+            const merged = { ...local, ...online };
+            try { await storage.save(blok, merged); } catch (e) { /* volgende keer opnieuw */ }
+            return merged;
+          }
+          return online;
         }
       } catch (e) { /* val terug op lokaal */ }
     }
@@ -767,11 +782,7 @@ const storage = {
       } catch (e) { /* val terug op localStorage */ }
     }
     // 3) localStorage
-    try {
-      const raw = localStorage.getItem(blok.storageKey);
-      if (raw) return JSON.parse(raw);
-    } catch (e) { /* niets */ }
-    return {};
+    return readLocal(blok);
   },
 
   async save(blok, data) {

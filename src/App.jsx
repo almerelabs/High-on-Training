@@ -397,7 +397,7 @@ const DAYS_B2 = [
 const P = (reps, rir, rust, tempo, kg = "") => ({ kg, reps, rir, rust, tempo });
 const BW3 = "lichaamsgewicht";
 
-/* Elke dag is mobiliteitsdag: deze kaart staat op alle dagen van blok 3. */
+/* Elke dag is mobiliteitsdag: dit is de kern van blok 3. */
 const MOB_B3 = {
   kind: "check", name: "Mobiliteit", tag: "Elke dag",
   items: [
@@ -434,22 +434,33 @@ const STRETCH_B3 = {
 
 const BLOK3_NOTES = [
   { t: "Belangrijkste doel", d: "Verbeteren van schouder- en bovenrugmobiliteit, versterken van de bovenrug, ontwikkelen van betere schouderbladcontrole en pijnvrij blijven sporten." },
+  { t: "Mobiliteit", d: "Voer de oefeningen rustig en gecontroleerd uit. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit." },
+  { t: "Herstel", d: "Houd bij voorkeur 2–3 dagen tussen Full Body A en Full Body B. De mobiliteitsoefeningen mogen dagelijks worden uitgevoerd, ook op trainingsdagen." },
   { t: "RIR (reps in reserve)", d: "Het aantal herhalingen dat je nog zou kunnen uitvoeren voordat je technisch faalt. Bij 2 RIR stop je wanneer je nog ongeveer 2 goede herhalingen zou kunnen maken." },
   { t: "Tempo 2-0-1-0", d: "2 seconden gecontroleerd laten zakken, 0 seconden pauze, 1 seconde omhoog en 0 seconden pauze voordat de volgende herhaling begint." },
   { t: "Tempo 2-1-1-0", d: "2 seconden gecontroleerd laten zakken of terugkomen, 1 seconde pauze in de afgesproken positie en 1 seconde terugbewegen. Bij rows houd je de schouderbladen 1 seconde samen aan het einde van de trekbeweging." },
   { t: "Progressie", d: "Bij 3 sets van 10–15 reps mag het gewicht de volgende training omhoog wanneer set 1 meer dan 15 reps haalt en set 2 en 3 minimaal 10 reps halen. Alle sets met goede techniek en ongeveer 2 RIR. Voorbeeld: 16/12/9 = niet verhogen. 16/12/10 = wel verhogen." },
   { t: "Schouderbladcontrole", d: "Bij rows de schouderbladen gecontroleerd naar elkaar toe bewegen aan het einde van de trekbeweging. Laat ze tijdens het terugkomen weer natuurlijk naar voren bewegen. Niet geforceerd naar achteren houden." },
-  { t: "Mobiliteit", d: "Voer de oefeningen rustig en gecontroleerd uit. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit." },
-  { t: "Herstel", d: "Houd bij voorkeur 2–3 dagen tussen Full Body A en Full Body B. De mobiliteitsoefeningen mogen dagelijks worden uitgevoerd, ook op trainingsdagen." },
   { t: "Hardlopen", d: "Minimaal 1 keer per week op rustig tempo (RPE 4–5). Je moet tijdens het hardlopen nog volledige zinnen kunnen spreken. Bouw de duur geleidelijk op." },
 ];
 
+/* De focus van blok 3 is elke dag mobiliteit (ma t/m zo): dat telt in de blokkaart.
+   Full Body A, de run en Full Body B zijn optionele, losse trainingen (optional: true). */
+const WEEKDAYS = [["Ma", "Maandag"], ["Di", "Dinsdag"], ["Wo", "Woensdag"], ["Do", "Donderdag"], ["Vr", "Vrijdag"], ["Za", "Zaterdag"], ["Zo", "Zondag"]];
+
 const DAYS_B3 = [
-  {
-    id: "b3d1", nr: 1, name: "Full Body A", sub: "Kracht", type: "kracht",
-    intro: "Begin met je dagelijkse mobiliteit. Kies bij de krachtoefeningen zelf een gewicht waarmee je de reps haalt op de aangegeven RIR, in het aangegeven tempo. Houd bij voorkeur 2–3 dagen tussen Full Body A en B.",
+  ...WEEKDAYS.map(([short, label], i) => ({
+    id: `b3m${i + 1}`, nr: i + 1, short, label, name: "Mobiliteit", sub: "Elke dag", type: "mob",
+    intro: "Dit is de focus van blok 3: elke dag je mobiliteit. Doe de vijf oefeningen rustig en gecontroleerd, en later op de dag je stretch cycle. Consistentie is belangrijker dan intensiteit.",
     ex: [
-      { id: "b3d1m", ...MOB_B3 },
+      { id: "b3mob", ...MOB_B3 },
+      { id: "b3str", ...STRETCH_B3 },
+    ],
+  })),
+  {
+    id: "b3d1", nr: 8, label: "Optioneel", optional: true, name: "Full Body A", sub: "Kracht", type: "kracht",
+    intro: "Optioneel en los van je mobiliteit. Kies zelf een gewicht waarmee je de reps haalt op de aangegeven RIR, in het aangegeven tempo. Houd bij voorkeur 2–3 dagen tussen Full Body A en B.",
+    ex: [
       {
         id: "b3d1a", kind: "str", name: "Seated thoracic extension", sets: 2,
         wk: W4(P("8-10", "", "30s", "rustig", BW3)),
@@ -541,14 +552,12 @@ const DAYS_B3 = [
         ],
         tip: "Houd de romp stabiel. Strek afwisselend een arm en het tegenovergestelde been zonder de onderrug sterk hol te trekken.",
       },
-      { id: "b3d1s", ...STRETCH_B3 },
     ],
   },
   {
-    id: "b3d2", nr: 2, name: "Zone 2 run", sub: "Cardio", type: "cardio",
-    intro: "Rustige run van 6 tot 10 km. Je moet tijdens het lopen nog volledige zinnen kunnen spreken (RPE 4–5); bouw de duur geleidelijk op. Stretch cycle later op de dag.",
+    id: "b3d2", nr: 9, label: "Optioneel", optional: true, name: "Zone 2 run", sub: "Cardio", type: "cardio",
+    intro: "Optioneel en los van je mobiliteit. Rustige run van 6 tot 10 km; je moet tijdens het lopen nog volledige zinnen kunnen spreken (RPE 4–5). Bouw de duur geleidelijk op.",
     ex: [
-      { id: "b3d2m", ...MOB_B3 },
       {
         id: "b3d2w", kind: "check", name: "Warming-up",
         items: [
@@ -578,14 +587,12 @@ const DAYS_B3 = [
         ],
         tip: "Zone 2 run: lekker lopen en genieten van het weer of je hoofd leegmaken. Tempo rond 6:30 per km.",
       },
-      { id: "b3d2s", ...STRETCH_B3 },
     ],
   },
   {
-    id: "b3d3", nr: 3, name: "Full Body B", sub: "Kracht", type: "kracht",
-    intro: "Houd bij voorkeur 2–3 dagen tussen Full Body A en B. Focus op je bovenrug en schouderbladcontrole, en blijf overal binnen een pijnvrije bewegingsuitslag.",
+    id: "b3d3", nr: 10, label: "Optioneel", optional: true, name: "Full Body B", sub: "Kracht", type: "kracht",
+    intro: "Optioneel en los van je mobiliteit. Houd bij voorkeur 2–3 dagen tussen Full Body A en B. Focus op je bovenrug en schouderbladcontrole, en blijf overal binnen een pijnvrije bewegingsuitslag.",
     ex: [
-      { id: "b3d3m", ...MOB_B3 },
       {
         id: "b3d3a", kind: "str", name: "Cat-cow", sets: 2,
         wk: W4(P("10", "", "30s", "rustig", BW3)),
@@ -677,15 +684,6 @@ const DAYS_B3 = [
         ],
         tip: "Sta met de rug tegen de muur. Beweeg de armen rustig omhoog binnen de beschikbare bewegingsruimte, zonder de onderrug overdreven hol te maken.",
       },
-      { id: "b3d3s", ...STRETCH_B3 },
-    ],
-  },
-  {
-    id: "b3d4", nr: 4, name: "Mobiliteit", sub: "Rustdagen", type: "mob",
-    intro: "Elke dag is mobiliteitsdag. Op dagen zonder training doe je je dagelijkse mobiliteit en later op de dag je stretch cycle.",
-    ex: [
-      { id: "b3d4m", ...MOB_B3 },
-      { id: "b3d4s", ...STRETCH_B3 },
     ],
   },
 ];
@@ -709,7 +707,7 @@ const BLOKS = [
     id: "blok3", name: "Blok 3", period: "okt 2026", badge: "actief", archived: false,
     days: DAYS_B3, storageKey: "blok3-ryan-log", logId: "ryan-blok3", notes: BLOK3_NOTES,
     eyebrow: "Trainingslog Ryan · Blok 3 · oktober 2026",
-    subtitle: "Mobiliteit · kracht · hardlopen — 3 trainingsdagen + elke dag mobiliteit · 4 weken · coach Zlatan",
+    subtitle: "Focus: elke dag mobiliteit — optioneel 2× full body + zone 2 run · 4 weken · coach Zlatan",
   },
 ];
 
@@ -811,6 +809,14 @@ const storage = {
 /* ─────────────────────────  helpers  ───────────────────────── */
 
 const dayKey = (w, d) => `w${w}d${d}`;
+/* "Dag 3", of het eigen label van een dag ("Maandag", "Optioneel"). */
+const dayLabel = (d) => d.label || `Dag ${d.nr}`;
+
+/* Blokken met weekdagen openen op vandaag; andere blokken op dag 1. */
+function startDay(blok) {
+  if (!blok.days.some((d) => d.short)) return 1;
+  return ((new Date().getDay() + 6) % 7) + 1; // ma = 1 … zo = 7
+}
 
 function emptyExLog(ex, week) {
   if (ex.kind === "str") return { sets: Array.from({ length: ex.sets }, () => ({ kg: "", reps: "", ok: false })), note: "" };
@@ -883,7 +889,7 @@ function buildExport(logs, week, blok) {
     const hasData = day.ex.some((ex) => exDoneCount(ex, dl.ex?.[ex.id]) > 0 || (dl.ex?.[ex.id]?.note || "").trim());
     if (!hasData && !dl.done && !(dl.note || "").trim()) return;
     any = true;
-    lines.push(`DAG ${day.nr} · ${day.name.toUpperCase()}${dl.done ? " ✅" : ""}${dl.date ? ` (${fmtDate(dl.date)})` : ""}`);
+    lines.push(`${dayLabel(day).toUpperCase()} · ${day.name.toUpperCase()}${dl.done ? " ✅" : ""}${dl.date ? ` (${fmtDate(dl.date)})` : ""}`);
     day.ex.forEach((ex) => {
       const el = dl.ex?.[ex.id];
       if (!el) return;
@@ -932,7 +938,7 @@ function buildExport(logs, week, blok) {
 export default function App() {
   const [logs, setLogs] = useState({});
   const [week, setWeek] = useState(0); // 0..3
-  const [dayNr, setDayNr] = useState(1); // 1..5
+  const [dayNr, setDayNr] = useState(() => startDay(BLOKS[DEFAULT_BLOK]));
   const [view, setView] = useState("training"); // training | overzicht
   const [blokIdx, setBlokIdx] = useState(DEFAULT_BLOK); // index in BLOKS
   const [loading, setLoading] = useState(true);
@@ -946,6 +952,8 @@ export default function App() {
 
   const blok = BLOKS[blokIdx];
   const DAYS = blok.days;
+  const CORE = DAYS.filter((d) => !d.optional); // telt in blokkaart en teller
+  const OPTIONAL = DAYS.filter((d) => d.optional);
   const blokRef = useRef(blok);
   blokRef.current = blok;
 
@@ -964,7 +972,9 @@ export default function App() {
     if (storage.mode() === "supabase") {
       poll = setInterval(async () => {
         if (Date.now() - lastEditRef.current < 8000) return; // niet tijdens typen
+        const started = Date.now();
         const data = await storage.load(blok);
+        if (lastEditRef.current >= started) return; // tijdens het laden aangepast: niet overschrijven
         if (alive && data) setLogs(data);
       }, 15000);
     }
@@ -1005,7 +1015,7 @@ export default function App() {
     }
     setLogs({});
     setWeek(0);
-    setDayNr(1);
+    setDayNr(startDay(BLOKS[idx]));
     setView("training");
     setProgExId(null);
     setBlokIdx(idx);
@@ -1333,7 +1343,7 @@ export default function App() {
         <p className="ov-intro">Kies een oefening en zie hoe je je over de vier weken ontwikkelt — plan versus wat je écht deed.</p>
         <select className="prog-select" value={ex.id} onChange={(e) => setProgExId(e.target.value)}>
           {DAYS.filter((d) => d.ex.some(isTrackable)).map((d) => (
-            <optgroup key={d.id} label={`Dag ${d.nr} · ${d.name}`}>
+            <optgroup key={d.id} label={`${dayLabel(d)} · ${d.name}`}>
               {d.ex.filter(isTrackable).map((e) => (
                 <option key={e.id} value={e.id}>{e.name}</option>
               ))}
@@ -1403,12 +1413,16 @@ export default function App() {
         </p>
         {weeksWithData.map((w) => {
           const txt = buildExport(logs, w, blok);
-          const daysDone = DAYS.filter((d) => logs[dayKey(w, d.nr)]?.done).length;
+          const daysDone = CORE.filter((d) => logs[dayKey(w, d.nr)]?.done).length;
+          const optDone = OPTIONAL.filter((d) => logs[dayKey(w, d.nr)]?.done).length;
           return (
             <section className="ov-week" key={w}>
               <header>
                 <h3>Week {w + 1}</h3>
-                <span className="ov-count">{daysDone}/{DAYS.length} trainingen afgerond</span>
+                <span className="ov-count">
+                  {daysDone}/{CORE.length} {OPTIONAL.length ? "dagen" : "trainingen"} afgerond
+                  {OPTIONAL.length > 0 && ` · ${optDone} optioneel`}
+                </span>
                 <button className="sharebtn small" onClick={() => copyExport(w)}>Kopieer</button>
               </header>
               {txt ? <pre className="ov-pre">{txt}</pre> : <p className="ov-empty">Nog niets gelogd.</p>}
@@ -1419,7 +1433,24 @@ export default function App() {
     );
   };
 
-  const dayDoneCount = DAYS.reduce((acc, d) => {
+  const renderDayBtn = (d) => {
+    const on = d.nr === dayNr;
+    const done = logs[dayKey(week, d.nr)]?.done;
+    return (
+      <button
+        key={d.id}
+        className={"daybtn" + (d.short ? " short" : "") + (on ? " on" : "")}
+        style={on ? { borderColor: TYPE_COLOR[d.type], color: TYPE_COLOR[d.type] } : {}}
+        aria-label={`${dayLabel(d)}${d.short ? "" : ` — ${d.name}`}${done ? " (afgerond)" : ""}`}
+        onClick={() => setDayNr(d.nr)}
+      >
+        {!d.short && <span className="d-nr">{d.optional ? TYPE_LABEL[d.type] : `Dag ${d.nr}`}</span>}
+        <span className="d-name">{d.short || d.name}{done ? " ✓" : ""}</span>
+      </button>
+    );
+  };
+
+  const dayDoneCount = CORE.reduce((acc, d) => {
     for (let w = 0; w < 4; w++) if (logs[dayKey(w, d.nr)]?.done) acc++;
     return acc;
   }, 0);
@@ -1453,16 +1484,16 @@ export default function App() {
           </div>
           <div className="mast-count">
             <span className="big">{dayDoneCount}</span>
-            <span className="small">van {DAYS.length * 4}<br />afgerond</span>
+            <span className="small">van {CORE.length * 4}<br />afgerond</span>
           </div>
         </div>
 
-        {/* blokkaart: 4 weken × de dagen van het blok */}
+        {/* blokkaart: 4 weken × de vaste dagen van het blok (optionele trainingen niet) */}
         <div className="blokkaart" role="navigation" aria-label="Weekoverzicht">
           {[0, 1, 2, 3].map((w) => (
             <div className="bk-row" key={w}>
               <span className="bk-wk">W{w + 1}</span>
-              {DAYS.map((d) => {
+              {CORE.map((d) => {
                 const done = logs[dayKey(w, d.nr)]?.done;
                 const active = view === "training" && w === week && d.nr === dayNr;
                 return (
@@ -1470,10 +1501,10 @@ export default function App() {
                     key={d.id}
                     className={"bk-cell" + (done ? " done" : "") + (active ? " active" : "")}
                     style={done ? { background: TYPE_COLOR[d.type], borderColor: TYPE_COLOR[d.type] } : {}}
-                    aria-label={`Week ${w + 1}, dag ${d.nr}${done ? " (afgerond)" : ""}`}
+                    aria-label={`Week ${w + 1}, ${dayLabel(d).toLowerCase()}${done ? " (afgerond)" : ""}`}
                     onClick={() => { setWeek(w); setDayNr(d.nr); setView("training"); window.scrollTo({ top: 0 }); }}
                   >
-                    {d.nr}
+                    {d.short || d.nr}
                   </button>
                 );
               })}
@@ -1504,23 +1535,17 @@ export default function App() {
         renderProgress()
       ) : (
         <main>
-          <div className="daypicker">
-            {DAYS.map((d) => (
-              <button
-                key={d.id}
-                className={"daybtn" + (d.nr === dayNr ? " on" : "")}
-                style={d.nr === dayNr ? { borderColor: TYPE_COLOR[d.type], color: TYPE_COLOR[d.type] } : {}}
-                onClick={() => setDayNr(d.nr)}
-              >
-                <span className="d-nr">Dag {d.nr}</span>
-                <span className="d-name">{d.name}</span>
-              </button>
-            ))}
-          </div>
+          <div className="daypicker">{CORE.map(renderDayBtn)}</div>
+          {OPTIONAL.length > 0 && (
+            <>
+              <p className="dp-label">Optionele trainingen</p>
+              <div className="daypicker optional">{OPTIONAL.map(renderDayBtn)}</div>
+            </>
+          )}
 
           <div className="dayhead" style={{ borderColor: TYPE_COLOR[day.type] }}>
             <div>
-              <h2>Dag {day.nr} — {day.name}</h2>
+              <h2>{dayLabel(day)} — {day.name}</h2>
               <p>{TYPE_LABEL[day.type]} · week {week + 1}{dayLog.date ? ` · ${fmtDate(dayLog.date)}` : ""}</p>
             </div>
             <button className={"donebtn" + (dayLog.done ? " on" : "")} onClick={toggleDayDone}
@@ -1531,14 +1556,14 @@ export default function App() {
 
           {day.intro && (
             <div className="infocard dayintro">
-              <span className="infolabel">Zo pak je dag {day.nr} aan</span>
+              <span className="infolabel">{day.label ? "Zo pak je het aan" : `Zo pak je dag ${day.nr} aan`}</span>
               <p>{day.intro}</p>
             </div>
           )}
 
           {blok.notes && (
             <details className="infocard bloknotes">
-              <summary className="infolabel">Uitleg bij {blok.name} · RIR, tempo, progressie</summary>
+              <summary className="infolabel">Uitleg bij {blok.name} · doel, mobiliteit, RIR, tempo</summary>
               <dl>
                 {blok.notes.map((n) => (
                   <div key={n.t}><dt>{n.t}</dt><dd>{n.d}</dd></div>
@@ -1676,6 +1701,13 @@ h1 .accent{color:var(--kracht);}
 .daybtn .d-name{font-weight:700; font-size:13px; color:var(--text);}
 .daybtn.on{background:var(--panel2);}
 .daybtn.on .d-name{color:inherit;}
+.daybtn.short{flex:1; min-width:0; align-items:center; padding:10px 0;}
+.dp-label{
+  margin:10px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10px;
+  text-transform:uppercase; letter-spacing:.1em; color:var(--muted);
+}
+.daypicker.optional{padding-top:6px;}
+.daypicker.optional .daybtn{flex:1; min-width:0; padding:8px 10px;}
 
 /* day header */
 .dayhead{

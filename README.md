@@ -21,10 +21,12 @@ De rij voor een nieuw blok wordt automatisch aangemaakt zodra je er voor het
 eerst iets in logt. Oudere blokken blijven daardoor volledig ongemoeid — en
 blijven ook bewerkbaar.
 
-Blok 3 heeft 3 trainingsdagen plus een mobiliteitsdag voor de rustdagen; de
-blokkaart en tellers passen zich aan het aantal dagen van het blok aan. Een
-blok kan een eigen uitlegkaart hebben (`notes`, zoals RIR, tempo en
-progressie) en afvinklijsten (`kind: "check"`) voor mobiliteit en warming-up.
+Blok 3 draait om **elke dag mobiliteit**: de blokkaart heeft per week 7 dagen
+(ma t/m zo) en opent op de dag van vandaag. Full Body A, de zone 2 run en Full
+Body B zijn optionele, losse trainingen (`optional: true`); die staan onder
+"Optionele trainingen" en tellen niet mee in de blokkaart. Een blok kan een
+eigen uitlegkaart hebben (`notes`, zoals RIR, tempo en progressie) en
+afvinklijsten (`kind: "check"`) voor mobiliteit en warming-up.
 
 Een nieuw blok toevoegen: zet het schema in `src/App.jsx` in een nieuwe
 `DAYS_B…`-constante, voeg een regel toe aan `BLOKS`, en zet `DEFAULT_BLOK` op

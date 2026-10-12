@@ -418,20 +418,6 @@ const MOB_B3 = {
   tip: "Voer de oefeningen rustig en gecontroleerd uit, met 15 sec rust tussen de sets. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit.",
 };
 
-/* Stretch cycle "zoals voorgeschreven door je fysio" — de oefeningen staan niet in het schema. */
-const STRETCH_B3 = {
-  kind: "stretch", name: "Stretch cycle (later op de dag)", rounds: 3, tag: "Volgens fysio",
-  desc: "Je vaste stretch cycle zoals je fysio hem heeft voorgeschreven. Drie volledige rondes, rustig uitgevoerd.",
-  aitips: [
-    "Doe de cycle later op de dag, los van je training.",
-    "Eén ronde = de volledige cycle; daarna begin je weer vanaf de eerste oefening.",
-    "Rustig bewegen en blijven ademen, nooit doorveren.",
-    "Voel rek, geen pijn — bij scherpe pijn ga je terug.",
-    "Twijfel je over een oefening? Check de uitvoering bij je fysio.",
-  ],
-  tip: "Elke dag je stretch cycle doen zoals voorgeschreven door je fysio: drie rondes van de volledige cycle.",
-};
-
 const BLOK3_NOTES = [
   { t: "Belangrijkste doel", d: "Verbeteren van schouder- en bovenrugmobiliteit, versterken van de bovenrug, ontwikkelen van betere schouderbladcontrole en pijnvrij blijven sporten." },
   { t: "Mobiliteit", d: "Voer de oefeningen rustig en gecontroleerd uit. Zoek een lichte tot matige rek, maar forceer nooit een grotere bewegingsuitslag. Consistentie is belangrijker dan intensiteit." },
@@ -451,11 +437,8 @@ const WEEKDAYS = [["Ma", "Maandag"], ["Di", "Dinsdag"], ["Wo", "Woensdag"], ["Do
 const DAYS_B3 = [
   ...WEEKDAYS.map(([short, label], i) => ({
     id: `b3m${i + 1}`, nr: i + 1, short, label, name: "Mobiliteit", sub: "Elke dag", type: "mob",
-    intro: "Dit is de focus van blok 3: elke dag je mobiliteit. Doe de vijf oefeningen rustig en gecontroleerd, en later op de dag je stretch cycle. Consistentie is belangrijker dan intensiteit.",
-    ex: [
-      { id: "b3mob", ...MOB_B3 },
-      { id: "b3str", ...STRETCH_B3 },
-    ],
+    intro: "Dit is de focus van blok 3: elke dag je mobiliteit. Doe de vijf oefeningen rustig en gecontroleerd. Consistentie is belangrijker dan intensiteit.",
+    ex: [{ id: "b3mob", ...MOB_B3 }],
   })),
   {
     id: "b3d1", nr: 8, label: "Optioneel", optional: true, name: "Full Body A", sub: "Kracht", type: "kracht",

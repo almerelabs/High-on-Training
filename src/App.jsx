@@ -706,6 +706,7 @@ const BLOKS = [
   {
     id: "blok3", name: "Blok 3", period: "okt 2026", badge: "actief", archived: false,
     days: DAYS_B3, storageKey: "blok3-ryan-log", logId: "ryan-blok3", notes: BLOK3_NOTES,
+    coreLabel: "Mobiliteitstraining · elke dag",
     eyebrow: "Trainingslog Ryan · Blok 3 · oktober 2026",
     subtitle: "Focus: elke dag mobiliteit — optioneel 2× full body + zone 2 run · 4 weken · coach Zlatan",
   },
@@ -1535,6 +1536,7 @@ export default function App() {
         renderProgress()
       ) : (
         <main>
+          {blok.coreLabel && <p className="dp-label">{blok.coreLabel}</p>}
           <div className="daypicker">{CORE.map(renderDayBtn)}</div>
           {OPTIONAL.length > 0 && (
             <>
@@ -1703,10 +1705,10 @@ h1 .accent{color:var(--kracht);}
 .daybtn.on .d-name{color:inherit;}
 .daybtn.short{flex:1; min-width:0; align-items:center; padding:10px 0;}
 .dp-label{
-  margin:10px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10px;
+  margin:12px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10px;
   text-transform:uppercase; letter-spacing:.1em; color:var(--muted);
 }
-.daypicker.optional{padding-top:6px;}
+.dp-label + .daypicker{padding-top:6px;}
 .daypicker.optional .daybtn{flex:1; min-width:0; padding:8px 10px;}
 
 /* day header */
